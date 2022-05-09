@@ -59,8 +59,10 @@ RUN apt-get -qqy update && \
 #===============
 # Set JAVA_HOME
 #===============
-ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-arm64/jre" \
-    PATH=$PATH:$JAVA_HOME/bin
+RUN echo '#!/bin/bash' >> /etc/profile.d/setJavaHome.sh && chmod +x /etc/profile.d/setJavaHome.sh
+RUN export JAVA_HOME=$(echo /usr/lib/jvm/java-8-openjdk-*/jre) && \
+    echo 'export JAVA_HOME="'$JAVA_HOME'"' >> /etc/profile.d/setJavaHome.sh && \
+    echo 'export PATH='$PATH:$JAVA_HOME/bin
 
 #=====================
 # Install Android SDK
@@ -100,7 +102,7 @@ RUN curl -sL https://deb.nodesource.com/setup_17.x | bash && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get clean
 
-RUN appium driver install uiautomator2 && appium driver install xcuitest
+RUN appium driver install uiautomator2
 
 #================================
 # APPIUM Test Distribution (ATD)
