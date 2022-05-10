@@ -61,6 +61,7 @@ RUN apt-get -qqy update && \
 #===============
 RUN echo '#!/bin/bash' >> /etc/profile.d/setJavaHome.sh && chmod +x /etc/profile.d/setJavaHome.sh
 RUN export JAVA_HOME=$(echo /usr/lib/jvm/java-8-openjdk-*/jre) && \
+    export PATH=$PATH:$JAVA_HOME && \
     echo 'export JAVA_HOME="'$JAVA_HOME'"' >> /etc/profile.d/setJavaHome.sh && \
     echo 'export PATH='$PATH:$JAVA_HOME/bin
 
@@ -102,7 +103,8 @@ RUN curl -sL https://deb.nodesource.com/setup_17.x | bash && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get clean
 
-RUN appium driver install uiautomator2
+ARG DRIVER="uiautomator2,xcuitest"
+RUN echo $DRIVER | xargs -d, -L 1 |xargs -L 1 appium driver install
 
 #================================
 # APPIUM Test Distribution (ATD)
