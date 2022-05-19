@@ -83,13 +83,13 @@ RUN apt-get -qqy update && \
 
 ENV JAVA_HOME="/usr/lib/jvm/openjdk8/jre"
 ENV PATH=$PATH:$JAVA_HOME/bin
-RUN echo "which java :"
-RUN which java && sleep 10
+#RUN echo "which java :"
+#RUN which java && sleep 10
 RUN mv $(echo /usr/lib/jvm/java-8-openjdk-*/) /usr/lib/jvm/openjdk8 && sleep 10
 #RUN echo "ls /usr/lib/jvm/openjdk8/jre :"
 #RUN ls /usr/lib/jvm/openjdk8/jre && sleep 10
 #RUN echo "update-alternatives --remove java:"
-#RUN update-alternatives --remove-all java && sleep 10
+RUN update-alternatives --remove-all java && sleep 10
 #RUN echo "which java :"
 #RUN which java && sleep 10
 #RUN echo "update-alternatives --install java:"
