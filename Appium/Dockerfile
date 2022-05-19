@@ -59,11 +59,49 @@ RUN apt-get -qqy update && \
 #===============
 # Set JAVA_HOME
 #===============
-RUN echo '#!/bin/bash' >> /etc/profile.d/setJavaHome.sh && chmod +x /etc/profile.d/setJavaHome.sh
-RUN export JAVA_HOME=$(echo /usr/lib/jvm/java-8-openjdk-*/jre) && \
-    export PATH=$PATH:$JAVA_HOME && \
-    echo 'export JAVA_HOME="'$JAVA_HOME'"' >> /etc/profile.d/setJavaHome.sh && \
-    echo 'export PATH='$PATH:$JAVA_HOME/bin
+#RUN echo '#!/bin/bash' >> /etc/profile.d/JAVA_HOME.sh && chmod +wx /etc/profile.d/JAVA_HOME.sh
+#RUN export JAVA_HOME=$(echo /usr/lib/jvm/java-8-openjdk-*/jre) && \
+#    echo 'export JAVA_HOME="'$JAVA_HOME'"' >> /etc/profile.d/JAVA_HOME.sh && \
+#    echo 'export PATH='$PATH:$JAVA_HOME/bin >> /etc/profile.d/JAVA_HOME.sh && \
+#    /bin/bash -c 'source /etc/profile'
+#
+#RUN echo ls -lrt $(which java) && sleep 10
+#RUN echo "get java link:"
+#RUN echo ls -lrt $(which java) | awk 'NR==1 {print $NF}' && sleep 10
+#RUN echo "get java final link:"
+#RUN echo $(ls -lrt $(ls -lrt $(which java) |awk 'NR==1 {print $NF}') |awk 'NR==1 {print $NF}') && sleep 10
+#RUN /bin/bash -c 'source /etc/profile' && echo $JAVA_HOME && sleep 10 && cat /etc/profile.d/JAVA_HOME.sh && sleep 10
+
+#RUN echo "update-alternatives --list java:"
+#RUN update-alternatives --list java && sleep 10
+#RUN echo "update-alternatives --display java:"
+#RUN update-alternatives --display java && sleep 10
+#RUN echo "update-alternatives --query java:"
+#RUN update-alternatives --query java && sleep 10
+#RUN echo "update-alternatives --config java:"
+#RUN update-alternatives --config java && sleep 10
+
+ENV JAVA_HOME="/usr/lib/jvm/openjdk8/jre"
+ENV PATH=$PATH:$JAVA_HOME/bin
+RUN echo "which java :"
+RUN which java && sleep 10
+RUN mv $(echo /usr/lib/jvm/java-8-openjdk-*/) /usr/lib/jvm/openjdk8 && sleep 10
+#RUN echo "ls /usr/lib/jvm/openjdk8/jre :"
+#RUN ls /usr/lib/jvm/openjdk8/jre && sleep 10
+#RUN echo "update-alternatives --remove java:"
+#RUN update-alternatives --remove-all java && sleep 10
+#RUN echo "which java :"
+#RUN which java && sleep 10
+#RUN echo "update-alternatives --install java:"
+RUN update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 1081 \
+    --slave /usr/share/man/man1/java.1.gz java.1.gz $JAVA_HOME/man/man1/java.1.gz \
+     && sleep 10
+#RUN echo "which java :"
+#RUN which java && sleep 10
+#RUN echo "update-alternatives --display java:"
+#RUN update-alternatives --display java && sleep 10
+#RUN echo "update-alternatives --query java:"
+#RUN update-alternatives --query java && sleep 10
 
 #=====================
 # Install Android SDK
