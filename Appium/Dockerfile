@@ -73,9 +73,9 @@ RUN wget -O tools.zip https://dl.google.com/android/repository/${SDK_VERSION}.zi
     chmod a+x -R $ANDROID_HOME && \
     chown -R root:root $ANDROID_HOME
 
-RUN mv cmdline-tools tools && mkdir cmdline-tools && mv tools cmdline-tools/tools
+RUN mv cmdline-tools latest && mkdir cmdline-tools && mv latest cmdline-tools/latest
 
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools:$ANDROID_HOME/cmdline-tools/tools/bin
+ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest:$ANDROID_HOME/cmdline-tools/latest/bin
 
 # https://askubuntu.com/questions/885658/android-sdk-repositories-cfg-could-not-be-loaded
 RUN mkdir -p ~/.android && \
@@ -100,7 +100,8 @@ RUN curl -sL https://deb.nodesource.com/setup_17.x | bash && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get clean
 
-RUN appium driver install uiautomator2 && appium driver install xcuitest
+ARG DRIVER="uiautomator2,xcuitest"
+RUN echo $DRIVER | xargs -d, -L 1 |xargs -L 1 appium driver install
 
 #================================
 # APPIUM Test Distribution (ATD)
