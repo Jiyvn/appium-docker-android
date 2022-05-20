@@ -59,8 +59,12 @@ RUN apt-get -qqy update && \
 #===============
 # Set JAVA_HOME
 #===============
-ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre" \
-    PATH=$PATH:$JAVA_HOME/bin
+ENV JAVA_HOME="/usr/lib/jvm/openjdk8/jre"
+ENV PATH=$PATH:$JAVA_HOME/bin
+RUN mv $(echo /usr/lib/jvm/java-8-openjdk-*/) /usr/lib/jvm/openjdk8
+RUN update-alternatives --remove-all java
+RUN update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 1081 \
+    --slave /usr/share/man/man1/java.1.gz java.1.gz $JAVA_HOME/man/man1/java.1.gz
 
 #=====================
 # Install Android SDK
