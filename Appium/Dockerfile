@@ -40,9 +40,11 @@ WORKDIR /root
 # salt-minion
 #   Infrastructure management (client-side)
 #==================
+ARG OPENJDK=17
+
 RUN apt-get -qqy update && \
     apt-get -qqy --no-install-recommends install \
-    openjdk-8-jdk \
+    openjdk-${OPENJDK}-jdk \
     ca-certificates \
     tzdata \
     zip \
@@ -74,18 +76,20 @@ RUN apt-get -qqy update && \
 
 #RUN echo "update-alternatives --list java:"
 #RUN update-alternatives --list java && sleep 10
-#RUN echo "update-alternatives --display java:"
-#RUN update-alternatives --display java && sleep 10
-#RUN echo "update-alternatives --query java:"
-#RUN update-alternatives --query java && sleep 10
+RUN echo "update-alternatives --display java:"
+RUN update-alternatives --display java && sleep 10
+RUN echo "update-alternatives --query java:"
+RUN update-alternatives --query java && sleep 10
 #RUN echo "update-alternatives --config java:"
 #RUN update-alternatives --config java && sleep 10
 
-ENV JAVA_HOME="/usr/lib/jvm/openjdk8/jre"
+ENV JAVA_HOME="/usr/lib/jvm/openjdk-$OPENJDK-jdk/"
 ENV PATH=$PATH:$JAVA_HOME/bin
+RUN echo $JAVA_HOME && sleep 10
+
 #RUN echo "which java :"
 #RUN which java && sleep 10
-RUN mv $(echo /usr/lib/jvm/java-8-openjdk-*/) /usr/lib/jvm/openjdk8 && sleep 10
+RUN mv $(echo /usr/lib/jvm/java-${OPENJDK}-openjdk-*/) /usr/lib/jvm/openjdk-${OPENJDK}-jdk && sleep 10
 #RUN echo "ls /usr/lib/jvm/openjdk8/jre :"
 #RUN ls /usr/lib/jvm/openjdk8/jre && sleep 10
 #RUN echo "update-alternatives --remove java:"
@@ -93,7 +97,7 @@ RUN update-alternatives --remove-all java && sleep 10
 #RUN echo "which java :"
 #RUN which java && sleep 10
 #RUN echo "update-alternatives --install java:"
-RUN update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 1081 \
+RUN update-alternatives --install /usr/bin/java java $JAVA_HOME/bin/java 1711 \
     --slave /usr/share/man/man1/java.1.gz java.1.gz $JAVA_HOME/man/man1/java.1.gz \
      && sleep 10
 #RUN echo "which java :"
